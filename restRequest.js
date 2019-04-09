@@ -4,9 +4,15 @@ function doSomethingWithConent(httpRequest) {
   if (httpRequest.readyState == 4) {
     if (httpRequest.status == 200) {
       var obj = JSON.parse(httpRequest.responseText);
-      for (var i = 0; i < obj.length; i++) {
-        localStorage.setItem(obj[i].id, obj[i].title);
-      }
+      var todos = obj.map(elem => ("id: " + JSON.stringify(elem.id) + ", " + "title: " + elem.title)).join('; ');
+      console.log(todos);
+      localStorage.setItem('todo', todos);//localStorage.setItem('todo', JSON.stringify(todos));
+      // for (var i = 0; i < obj.length; i++) {
+      //   todos = [obj[i].id, obj[i].title];
+      //   todos.join(',');
+      //   localStorage.setItem('todo', JSON.stringify(todos));
+      // }
+      
     } else if (httpRequest.status == 201) {
       var getUrl = url + "/" + JSON.parse(httpRequest.responseText).id;
       makeRequest(getUrl, "GET", null);
@@ -42,3 +48,4 @@ function makeRequest(url, method, params) {
   httpRequest.send(params);
 }
 
+makeRequest(url, "GET", null);
